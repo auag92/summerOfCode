@@ -4,9 +4,11 @@ import os
 import numpy.fft as fftmodule
 import pymks
 
+
 def initField(size=(101, 101), n_samples=1, factor=1e-2):
     X0 = (2 * np.random.random((n_samples,) + size) - 1)*factor
     return X0
+
 
 def ch_solver(X, dx=0.25, dt=0.001, gamma = 1.):
 
@@ -39,6 +41,15 @@ def ch_solver(X, dx=0.25, dt=0.001, gamma = 1.):
     Fy = (FX * (1 + dt * explicit) - ksq * dt * FX3) / (1 - dt * implicit)
     response = fftmodule.ifftn(Fy,axes=axes).real
     return response
+
+def make_dataset(seed, tsteps=1, shape=(1, 51, 51), dx = 0.1, dt=1e-2, gamma=1.):
+    np.random.seed(seed)
+    X0 = np.random.normal(loc=0.0, scale = 1.0, size=shape)*1.e-1
+    X  = X0.copy()
+    for i in range(tsteps):
+        X = ch_solver(X, dx = dx, dt=dt, gamma= gamma)
+    return X0, X
+
 
 def main():
     directory = "data/"
