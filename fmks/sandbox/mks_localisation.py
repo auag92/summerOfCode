@@ -1,5 +1,4 @@
 import numpy as np
-import legendre
 import numpy.fft as fft
 from scipy.linalg import lstsq
 from sklearn.linear_model import LinearRegression
